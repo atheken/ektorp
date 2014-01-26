@@ -7,13 +7,35 @@ var migrations = require('../index.js');
 var HALF_SECOND = 500;
 
 xdescribe("Migration function", function(){
-	_couchConnection = null;
+	_baseconn = nano("http://localhost:5984/");
+	
+	_conn = null;
+	_dbname = null;
+
+	//create a test database in which to push migrations.
 	beforeEach(function(done){
-		done();
+		_dbname = "couch_migrations_tests_" + 
+			new Date().getTime() + "_" + Math.floor(Math.random() * 10000);
+
+		_baseconn.db.create(_dbname, function(err){
+			if(err){
+				throw "Couldn't create test db: " + _dbname;
+			}else{
+				_conn = _baseconn.use(_dbname);
+				done();
+			}
+		});
 	}, HALF_SECOND);
 
+	//destroy the test database.
 	afterEach(function(done){
-		done();
+		_baseconn.db.destroy(_dbname, function(err){
+			if(err){
+				throw "Couldn't destroy test db: " + _dbname;
+			}else{
+				done();
+			}
+		});
 	}, HALF_SECOND);
 
 	it("applies migration that returns an object.", function(done) {
