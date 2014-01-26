@@ -1,0 +1,21 @@
+{
+  "name": "couch-migrate",
+  "version": "0.0.0",
+  "description": "Migrations framework for CouchDB!",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine-node ./tests"
+  },
+  "keywords": [
+    "couchdb",
+    "migrations"
+  ],
+  "author": "Andrew T. Theken",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "nano": "~4.4.0"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.13.0"
+  }
+}
