@@ -6,6 +6,10 @@
   "scripts": {
     "test": "jasmine-node ./tests"
   },
+  "repository" : { 
+    "type" : "git",
+    "url" : "https://github.com/atheken/couch-migrations.git"
+  },
   "keywords": [
     "couchdb",
     "migrations"
