@@ -1,6 +1,6 @@
-couch-migrations
-================
+Ektorp
+======
 
-Migrations framework for CouchDB!
+Put your Couch together!
 
-[![Build Status](https://travis-ci.org/atheken/couch-migrations.png?branch=master)](https://travis-ci.org/atheken/couch-migrations)
+[![Build Status](https://travis-ci.org/atheken/ektorp.png?branch=master)](https://travis-ci.org/atheken/ektorp)
