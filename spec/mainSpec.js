@@ -29,14 +29,13 @@ describe("Migration function", function(){
 
 	//destroy the test database.
 	afterEach(function(done){
-		done();
-		/*_baseconn.db.destroy(_dbname, function(err){
+		_baseconn.db.destroy(_dbname, function(err){
 			if(err){
 				throw "Couldn't destroy test db: " + _dbname;
 			}else{
 				done();
 			}
-		});*/
+		});
 	}, HALF_SECOND);
 
 	it("applies object-based migration.", function(done) {
