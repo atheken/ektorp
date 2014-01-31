@@ -1,14 +1,14 @@
 {
-  "name": "couch-migrate",
+  "name": "ektorp",
   "version": "0.0.0",
-  "description": "Migrations framework for CouchDB!",
+  "description": "Migrations framework for CouchDB. Put your couch together!",
   "main": "index.js",
   "scripts": {
     "test": "jasmine-node ./spec"
   },
   "repository" : { 
     "type" : "git",
-    "url" : "https://github.com/atheken/couch-migrations.git"
+    "url" : "https://github.com/atheken/ektorp.git"
   },
   "keywords": [
     "couchdb",
