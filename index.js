@@ -1,5 +1,10 @@
 (function(){
+	"use strict"
+
 	var EventEmitter = require('events').EventEmitter;
+	var isFunction = function(o){return o !== null && Object.prototype.toString.call(o) === '[object Function]';};
+	var isArray = function(o){return o !== null && Object.prototype.toString.call(o) === "[object Array]";};
+	var isObject = function(o){return o !== null && Object.prototype.toString.call(o) === "[object Object]";};
 
 	var configureMigrations = function(migrations){
 		var retval = migrations;
@@ -15,16 +20,16 @@
 				var mig = require(migrations + '/' + filename);
 
 				//is this an object or a function?
-				if(Object.prototype.toString.call(mig) === "[object Object]"){
+				if(isObject(mig)){
 					//check for "_id"...
 					if(mig._id){
 						mig = { docs : [mig] };
 					}
 				}
-				else if(Object.prototype.toString.call(mig) === "[object Array]"){
+				else if(isArray(mig)){
 					mig = {docs : mig};
 				}
-				else if(Object.prototype.toString.call(mig) === "[object Function]"){
+				else if(isFunction(mig)){
 					mig = { docs : mig };
 				}else{
 					throw "Only objects and functions are supported for migrations, " 
@@ -50,18 +55,52 @@
 	}
 
 	var applyMigration = function(db, migration, next){
+		
 		db.get('_design/applied_migrations', {include_docs : true}, function(err, result){
 			var current = { 
 				_id : '_design/applied_migrations',
 				applied_migrations : []
 			};
 
+
 			if(err && err.reason !== 'missing'){
 				next(err);
-			}else{
-				//push the label, and the doc to the server, together.
+			}
+			else{
+				result = result || current;
+				
+				var already_applied = false;
 
-				next(null,migration.label);
+				for(var i = 0; i < result.applied_migrations.length; i++){
+					var entry = result.applied_migrations[i];
+					if(entry.label === migration.label){
+						already_applied = true;
+						break;
+					}
+				}
+				if(!already_applied){
+					result.applied_migrations.push({label : migration.label, date_applied : new Date().toString()});
+					var bulk = [result];
+
+					var docs = migration.docs;
+					if(isObject(docs)){
+						bulk = bulk.concat([docs]);
+					}else if(isArray(result)){
+						bulk = bulk.concat(docs);
+					}
+
+					db.bulk({ docs : bulk }, null, function(err, bulk_insert_result){
+						if(err){
+							next(err);
+						}			
+						else{
+							next(null, "applied", migration.label);
+						}
+					});
+				}
+				else{
+					next(null, "applied_previously", migration.label);
+				}
 				//var applied_migrations = { migrations : [] }
 			}
 		});
@@ -70,11 +109,11 @@
 	var migrate = function(db, migrations, emitter){
 		if(migrations.length > 0){
 			var migration = migrations.shift();
-			applyMigration(db, migration, function(err, result){
+			applyMigration(db, migration, function(err, result, label){
 				if(err){
 					emitter.emit('error', err);
 				}else{
-					emitter.emit('applied', result);
+					emitter.emit(result, label);
 					migrate(db, migrations, emitter);
 				}
 			});

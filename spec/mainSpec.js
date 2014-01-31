@@ -29,13 +29,14 @@ describe("Migration function", function(){
 
 	//destroy the test database.
 	afterEach(function(done){
-		_baseconn.db.destroy(_dbname, function(err){
+		done();
+		/*_baseconn.db.destroy(_dbname, function(err){
 			if(err){
 				throw "Couldn't destroy test db: " + _dbname;
 			}else{
 				done();
 			}
-		});
+		});*/
 	}, HALF_SECOND);
 
 	it("applies object-based migration.", function(done) {
@@ -81,9 +82,7 @@ describe("Migration function", function(){
 	it("returns event emitter.", function(done){
 		var results = migrations(_conn, [{
 			label : "1234",
-			up : function(){
-				//doesn't need to do anything.. not failing is good enough.
-			}
+			docs : {}
 		},{
 			label : "4567",
 			docs : [{
