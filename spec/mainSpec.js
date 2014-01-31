@@ -6,7 +6,7 @@ var migrations = require('../index.js');
 //set async timeout to a half-second.
 var HALF_SECOND = 500;
 
-xdescribe("Migration function", function(){
+describe("Migration function", function(){
 	_baseconn = nano("http://localhost:5984/");
 	
 	_conn = null;
@@ -38,11 +38,11 @@ xdescribe("Migration function", function(){
 		});
 	}, HALF_SECOND);
 
-	it("applies migration that returns an object.", function(done) {
+	it("applies object-based migration.", function(done) {
 		done();
 	}, HALF_SECOND);
 	
-	it("applies migration that returns a function.", function(done) {
+	it("applies function-based migration.", function(done) {
 		done();
 	}, HALF_SECOND);
 	
@@ -78,8 +78,33 @@ xdescribe("Migration function", function(){
 		done();
 	}, HALF_SECOND);
 
-	it("returns results of running migrations.", function(done){
-		done();
+	it("returns event emitter.", function(done){
+		var results = migrations(_conn, [{
+			label : "1234",
+			up : function(){
+				//doesn't need to do anything.. not failing is good enough.
+			}
+		},{
+			label : "4567",
+			docs : [{
+				_id : "seed_doc",
+				title : "test"
+			}]
+		}]);
+		
+		var appliedSpy = jasmine.createSpy();
+		results.on('applied', appliedSpy);
+
+		results.on('done', function(){
+			expect(appliedSpy.callCount).toEqual(2);
+			expect(appliedSpy).toHaveBeenCalledWith(4567);
+			expect(appliedSpy).toHaveBeenCalledWith(1234);
+			done();
+		});
+
+		results.on('error', function(err){
+			done(err);
+		});
 	}, HALF_SECOND);
 
 });
