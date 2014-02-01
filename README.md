@@ -38,10 +38,12 @@ To integrate ektorp and control more aspects of the migration:
 	var ektorp = require('ektorp');
 
 	//pass the url to the DB you want to upgrade, and the path to migrations:
-	var migrations = ektorp('http://localhost:5984/new_db', './migrations');
+	var migrator = ektorp('http://localhost:5984/new_db', './migrations');
 
+	migrator.on('done', function(){ console.log('Migrations are done!'); });
 
-	migrations.on('done', function(){ console.log('Migrations are done!'); });
+	//cause the migrator to start.
+	migrator.start();
 	```
 
 #### How do I write a migration? 
