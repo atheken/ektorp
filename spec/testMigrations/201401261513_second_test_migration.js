@@ -1,5 +1,5 @@
-module.exports = function(){
+module.exports = (function(){
 	return { 
-		_id : "_design/test"
+		_id : "test"
 	};
-};
+})();

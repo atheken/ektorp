@@ -2,16 +2,16 @@
   "name": "ektorp",
   "version": "0.0.0",
   "description": "Migrations framework for CouchDB. Put your couch together!",
-  "main": "index.js",
-  "bin" : { 
-    "ektorp" : "cli.js"
+  "main": "lib/index.js",
+  "bin": {
+    "ektorp": "lib/cli.js"
   },
   "scripts": {
     "test": "jasmine-node ./spec"
   },
-  "repository" : { 
-    "type" : "git",
-    "url" : "https://github.com/atheken/ektorp.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atheken/ektorp.git"
   },
   "keywords": [
     "couchdb",
@@ -23,6 +23,10 @@
     "nano": "~4.4.0"
   },
   "devDependencies": {
-    "jasmine-node": "~1.13.0"
+    "jasmine-node": "~1.13.0",
+    "grunt": "~0.4.2",
+    "grunt-jasmine-node": "~0.1.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-jshint": "~0.8.0"
   }
 }

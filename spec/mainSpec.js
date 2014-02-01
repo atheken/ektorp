@@ -1,16 +1,15 @@
 var nano = require('nano');
 
 //load the module under test.
-var migrations = require('../index.js');
+var ektorp = require('../lib/index.js');
 
 //set async timeout to a half-second.
 var HALF_SECOND = 500;
 
 describe("Migration function", function(){
 	_baseconn = nano("http://localhost:5984/");
-	
-	_conn = null;
 	_dbname = null;
+	_conn = null;
 
 	//create a test database in which to push migrations.
 	beforeEach(function(done){
@@ -38,71 +37,85 @@ describe("Migration function", function(){
 		});
 	}, HALF_SECOND);
 
-	it("applies object-based migration.", function(done) {
+	xit("applies object-based migration.", function(done) {
 		done();
 	}, HALF_SECOND);
 	
-	it("applies function-based migration.", function(done) {
+	xit("applies function-based migration.", function(done) {
 		done();
 	}, HALF_SECOND);
 	
-	it("does not crash when no result is returned from a function.", function(done) {
+	xit("does not crash when no result is returned from a function.", function(done) {
 		done();
 	}, HALF_SECOND);
 	
-	it("halts migrations when an exception is thrown from a migration.", function(done){
+	xit("halts migrations when an exception is thrown from a migration.", function(done){
 		done();
 	}, HALF_SECOND);
 
-	it("applies 'up()' function when present on return object.", function(done){
+	xit("applies 'up()' function when present on return object.", function(done){
 		done();
 	}, HALF_SECOND);
 	
-	it("applies 'down()' function when requested on return object.", function(done){
+	xit("applies 'down()' function when requested on return object.", function(done){
 		done();
 	}, HALF_SECOND);
 
-	it("creates a '_design/migrations' document to store information on a database.", function(done){
+	xit("creates a '_design/migrations' document to store information on a database.", function(done){
 		done();
 	}, HALF_SECOND);
 
 	it("parses version from file name.", function(done){
-		done();
+
+		var versions = [201401261512,201401261513];
+
+		var migrator = ektorp(_conn, __dirname + '/testMigrations');
+		
+		migrator.on('applied', function(label){
+			expect(label).toEqual(versions.shift());
+		});
+
+		migrator.on('done', function(){
+			done();
+		});
+		
+		migrator.start();
+
 	}, HALF_SECOND);
 
-	it("runs an array of migrations passed as second argument.", function(done){
-		done();
-	}, HALF_SECOND);
 
 	it("loads an array of migrations based on a file path.", function(done){
+		var appliedSpy = jasmine.createSpy();
+		var migrator = ektorp(_conn, __dirname + '/testMigrations');
+
+		migrator.on('applied',appliedSpy);
+
+		migrator.on('done', function(){
+			expect(appliedSpy.callCount).toEqual(2);
+			done();
+		});
+
+		migrator.on('error', function(err){
+			done(err);
+		});
+
+		migrator.start();
+	}, HALF_SECOND);
+
+	xit("runs an array of migrations passed as second argument.", function(done){
 		done();
 	}, HALF_SECOND);
 
 	it("returns event emitter.", function(done){
-		var results = migrations(_conn, [{
-			label : "1234",
-			docs : {}
-		},{
-			label : "4567",
-			docs : [{
-				_id : "seed_doc",
-				title : "test"
-			}]
-		}]);
-		
-		var appliedSpy = jasmine.createSpy();
-		results.on('applied', appliedSpy);
+		var migrator = ektorp(_conn, []);
 
-		results.on('done', function(){
-			expect(appliedSpy.callCount).toEqual(2);
-			expect(appliedSpy).toHaveBeenCalledWith(4567);
-			expect(appliedSpy).toHaveBeenCalledWith(1234);
+		migrator.on('done', function(){
+			//getting here is enough to prove this works.
+			expect(true).toBe(true);
 			done();
 		});
 
-		results.on('error', function(err){
-			done(err);
-		});
+		migrator.start();	
 	}, HALF_SECOND);
 
 });
