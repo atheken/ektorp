@@ -37,6 +37,7 @@ describe("Migration function", function(){
 		});
 	}, HALF_SECOND);
 
+
 	xit("applies object-based migration.", function(done) {
 		done();
 	}, HALF_SECOND);
@@ -61,61 +62,69 @@ describe("Migration function", function(){
 		done();
 	}, HALF_SECOND);
 
-	xit("creates a '_design/migrations' document to store information on a database.", function(done){
+	it("creates a '_design/migrations' document to store information on a database.", function(done){
+
+		var migrator = ektorp(_conn, [{label: "1", docs : []},{ label: 2, docs : []}]);
+
+		migrator.on('done', function(){
+			_conn.get('_design/migrations',{include_docs : true}, function(err,result){
+				expect(result).not.toBeNull();
+				expect(result.applied_migrations.length).toEqual(2);
+				done();
+			});
+		});
+		
 		done();
 	}, HALF_SECOND);
+
 
 	it("parses version from file name.", function(done){
 
 		var versions = [201401261512,201401261513];
-
 		var migrator = ektorp(_conn, __dirname + '/testMigrations');
 		
 		migrator.on('applied', function(label){
-			expect(label).toEqual(versions.shift());
-		});
+					expect(label).toEqual(versions.shift());
+				})
+				.on('done', function(){
+					done();
+				});
 
-		migrator.on('done', function(){
-			done();
-		});
-		
 		migrator.start();
 
 	}, HALF_SECOND);
-
 
 	it("loads an array of migrations based on a file path.", function(done){
 		var appliedSpy = jasmine.createSpy();
 		var migrator = ektorp(_conn, __dirname + '/testMigrations');
 
-		migrator.on('applied',appliedSpy);
-
-		migrator.on('done', function(){
-			expect(appliedSpy.callCount).toEqual(2);
-			done();
-		});
-
-		migrator.on('error', function(err){
-			done(err);
-		});
+		migrator.on('applied',appliedSpy)
+				.on('done', function(){
+					expect(appliedSpy.callCount).toEqual(2);
+					done();
+				});
 
 		migrator.start();
 	}, HALF_SECOND);
 
-	xit("runs an array of migrations passed as second argument.", function(done){
+	it("runs an array of migrations passed as second argument.", function(done){
+		var appliedSpy = jasmine.createSpy();
+
+		var migrator = ektorp(_conn, [{label: "1", docs : []},{ label: 2, docs : []}]);
+
+		migrator.on('applied',appliedSpy)
+				.on('done', function(){
+					expect(appliedSpy.callCount).toEqual(2);
+					done();
+			});
+
 		done();
 	}, HALF_SECOND);
 
-	it("returns event emitter.", function(done){
+	it("returns event emitter.", function(){
 		var migrator = ektorp(_conn, []);
-
-		migrator.on('done', function(){
-			//getting here is enough to prove this works.
-			expect(true).toBe(true);
-			done();
-		});
-
-		migrator.start();	
-	}, HALF_SECOND);
+		var EventEmitter = require('events').EventEmitter;
+		expect(migrator instanceof EventEmitter).toBe(true);
+	});
 
 });
