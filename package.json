@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Migrations framework for CouchDB. Put your couch together!",
   "main": "index.js",
+  "bin" : { 
+    "ektorp" : "cli.js"
+  },
   "scripts": {
     "test": "jasmine-node ./spec"
   },
