@@ -188,11 +188,26 @@ describe("Migration function", function(){
 		expect(migrator instanceof EventEmitter).toBe(true);
 	});
 
-	xit("function-based migrations are provided a reference to the database.", function(done){
+	it("provides a reference to the database for function-based migrations.", function(done){
+		
+		var migrationFunction = function(db){
+			expect(db.config.db).toEqual(_dbname);
+			done();
+		};
+
+		var migrator = ektorp(_conn, {label : 1, docs : migrationFunction});
+		migrator.start();
 
 	}, HALF_SECOND);
 
-	xit("function-based migrations are provided a callback when their arity is two.", function(done){
+	it("provides a callback when function-based migrations have an arity of two.", function(done){
+		
+		var migrationFunction = function(connection, callback){
+			expect(callback).not.toBeUndefined();
+			done();
+		};
+		var migrator = ektorp(_conn, {label : 1, docs : migrationFunction});
+		migrator.start();
 
 	}, HALF_SECOND);
 
