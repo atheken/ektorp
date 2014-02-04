@@ -211,7 +211,24 @@ describe("Migration function", function(){
 
 	}, HALF_SECOND);
 
-	xit("skips migrations that have already been applied.", function(done){
+	it("skips migrations that have already been applied.", function(done){
+		var migrations = [{ label : 1, docs : []}, {label : 2, docs : []}];
+		var migrator = ektorp(_conn, migrations);
+
+		migrator.on('done', function(){
+			var m2 = ektorp(_conn, migrations);
+			var skipSpy = jasmine.createSpy();
+			m2.on('skipped', skipSpy)
+				.on('done', function(){
+					expect(skipSpy.callCount).toBe(2);
+					expect(skipSpy).toHaveBeenCalledWith(1);
+					expect(skipSpy).toHaveBeenCalledWith(2);
+					done();
+				});
+			m2.start();
+		});
+
+		migrator.start();
 
 	}, HALF_SECOND);
 
