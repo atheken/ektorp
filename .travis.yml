@@ -9,3 +9,5 @@ node_js:
   - "0.11"
 services:
   - couchdb
+env:
+  - TEST_TIMEOUT=5000

@@ -5,6 +5,9 @@ var ektorp = require('../lib/index.js');
 
 //async timeout will be a half-second.
 var HALF_SECOND = 500;
+var TEST_TIMEOUT = parseInt(process.env.TEST_TIMEOUT || HALF_SECOND);
+
+console.info("Test timeout is set to: " + TEST_TIMEOUT + "ms");
 
 describe("Migration function", function(){
 	_baseconn = nano("http://localhost:5984/");
@@ -24,7 +27,7 @@ describe("Migration function", function(){
 				done();
 			}
 		});
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	//destroy the test database.
 	afterEach(function(done){
@@ -35,7 +38,7 @@ describe("Migration function", function(){
 				done();
 			}
 		});
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 
 	it("applies object-based migration.", function(done) {
@@ -51,7 +54,7 @@ describe("Migration function", function(){
 			});
 		});
 		migrator.start();
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 	
 	it("applies array-based migration", function(done){
 		var testid1 = "testid1";
@@ -69,7 +72,7 @@ describe("Migration function", function(){
 		});
 		migrator.start();
 
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	it("fails when no document is provided.", function(done) {
 		var migrator = ektorp(_conn, {label: 1, docs : null});
@@ -81,7 +84,7 @@ describe("Migration function", function(){
 		});
 
 		migrator.start();
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 	
 	it("applies function-based migration.", function(done) {
 		var id = 'text1234';
@@ -101,7 +104,7 @@ describe("Migration function", function(){
 		});
 
 		migrator.start();
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	it("halts migrations when an exception is thrown from a migration.", function(done){
 		var errorMessage = 'Function failed to get docs.';
@@ -121,7 +124,7 @@ describe("Migration function", function(){
 		});
 
 		migrator.start();
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 
 	it("creates a '_design/migrations' document to store information on a database.", function(done){
@@ -137,7 +140,7 @@ describe("Migration function", function(){
 		});
 
 		done();
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 
 	it("parses version from file name.", function(done){
@@ -153,7 +156,7 @@ describe("Migration function", function(){
 
 		migrator.start();
 
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	it("loads an array of migrations based on a file path.", function(done){
 		var appliedSpy = jasmine.createSpy();
@@ -166,7 +169,7 @@ describe("Migration function", function(){
 				});
 
 		migrator.start();
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	it("runs an array of migrations passed as second argument.", function(done){
 		var appliedSpy = jasmine.createSpy();
@@ -180,7 +183,7 @@ describe("Migration function", function(){
 			});
 
 		done();
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	it("returns event emitter.", function(){
 		var migrator = ektorp(_conn, []);
@@ -198,7 +201,7 @@ describe("Migration function", function(){
 		var migrator = ektorp(_conn, {label : 1, docs : migrationFunction});
 		migrator.start();
 
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	it("provides a callback when function-based migrations have an arity of two.", function(done){
 		
@@ -209,7 +212,7 @@ describe("Migration function", function(){
 		var migrator = ektorp(_conn, {label : 1, docs : migrationFunction});
 		migrator.start();
 
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	it("skips migrations that have already been applied.", function(done){
 		var migrations = [{ label : 1, docs : []}, {label : 2, docs : []}];
@@ -230,13 +233,13 @@ describe("Migration function", function(){
 
 		migrator.start();
 
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	xit("updates existing documents", function(done){
 
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 
 	xit("skips migration when it would not modify target document", function(done){
 
-	}, HALF_SECOND);
+	}, TEST_TIMEOUT);
 });
