@@ -1,11 +1,11 @@
 ## Ektorp
 ### Some assembly required.
 
-_Ektorp is a library and command-line utility for building your CouchDB._
+_Ektorp is a node.js library and command-line utility for building your CouchDB._
 
 #### Project Status
 
-# Ektorp is incomplete, don't use this package yet!
+_Ektorp is incomplete but we have a number of tests, and most of them are passing. :-)_
 
 [![Build Status](https://travis-ci.org/atheken/ektorp.png?branch=master)](https://travis-ci.org/atheken/ektorp)
 
