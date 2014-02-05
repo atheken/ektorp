@@ -20,7 +20,8 @@
   "author": "Andrew T. Theken",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "nano": "~4.4.0"
+    "nano": "~4.4.0",
+    "underscore": "~1.5.2"
   },
   "devDependencies": {
     "jasmine-node": "~1.13.0",

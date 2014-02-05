@@ -5,7 +5,7 @@ var ektorp = require('../lib/index.js');
 
 //async timeout will be a half-second.
 var HALF_SECOND = 500;
-var TEST_TIMEOUT = parseInt(process.env.TEST_TIMEOUT || HALF_SECOND);
+var TEST_TIMEOUT = parseInt(process.env.TEST_TIMEOUT || HALF_SECOND * 10);
 
 console.info("Test timeout is set to: " + TEST_TIMEOUT + "ms");
 
@@ -235,8 +235,27 @@ describe("Migration function", function(){
 
 	}, TEST_TIMEOUT);
 
-	xit("updates existing documents", function(done){
+	it("updates existing documents", function(done){
+		var mig1 = {label: 1, docs : {_id : "name1", value : 1}};
+		var mig2 = {label: 2, docs : {_id : "name1", value : 2}};
 
+		var migrator = ektorp(_conn, mig1);
+		migrator.on('done', function(){
+			var migrator2 = ektorp(_conn, mig2);
+			migrator2.on('done', function(){
+				_conn.get("name1", function(err, doc){
+					expect(doc.value).toEqual(2);
+					done();	
+				});
+				
+			})
+			.on('diag', function(d){
+				console.log(d);
+			});
+			migrator2.start();
+		});
+
+		migrator.start();
 	}, TEST_TIMEOUT);
 
 	xit("skips migration when it would not modify target document", function(done){
