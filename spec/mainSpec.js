@@ -258,12 +258,18 @@ describe("Migration function", function(){
 		migrator.start();
 	}, TEST_TIMEOUT);
 
-	xit("should create the database if it does not yet exist.", function(done){
-		var db = "http://localhost:5984/asdf";
-		var migrator = ektorp(db, [{label: 1, docs : {}}]);
+	it("should create the database if it does not yet exist.", function(done){
+		var server = "http://localhost:5984/";
+		var db = "test_create_then_destroy_db_" +
+			new Date().getTime() + "_" + Math.floor(Math.random() * 10000);
+
+		var migrator = ektorp(server + db, [{label: 1, docs : {}}]);
 		migrator.on('done', function(){
-			var dbconn = nano(db);
-			done();
+			var s = nano(server);
+			s.db.destroy(db, function(err){
+				expect(err).toBeNull();
+				done();
+			});
 		});
 		migrator.start();
 	}, TEST_TIMEOUT);
