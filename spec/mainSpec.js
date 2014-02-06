@@ -258,6 +258,16 @@ describe("Migration function", function(){
 		migrator.start();
 	}, TEST_TIMEOUT);
 
+	xit("should create the database if it does not yet exist.", function(done){
+		var db = "http://localhost:5984/asdf";
+		var migrator = ektorp(db, [{label: 1, docs : {}}]);
+		migrator.on('done', function(){
+			var dbconn = nano(db);
+			done();
+		});
+		migrator.start();
+	}, TEST_TIMEOUT);
+
 	xit("skips migration when it would not modify target document", function(done){
 
 	}, TEST_TIMEOUT);
