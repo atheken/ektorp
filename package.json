@@ -1,8 +1,8 @@
 {
   "name": "ektorp",
-  "version": "0.0.6-alpha",
+  "version": "0.0.7-alpha",
   "description": "Migrations framework for CouchDB. Some assembly required!",
-  "homepage" : "http://couchmigrations.org/",
+  "homepage": "http://couchmigrations.org/",
   "main": "lib/index.js",
   "bin": {
     "ektorp": "lib/cli.js"
@@ -29,6 +29,7 @@
     "grunt": "~0.4.2",
     "grunt-jasmine-node": "~0.1.0",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-jshint": "~0.8.0"
+    "grunt-contrib-jshint": "~0.8.0",
+    "seq": "~0.3.5"
   }
 }
