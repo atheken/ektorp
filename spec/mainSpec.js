@@ -144,13 +144,15 @@ describe("Migration function", function(){
 
 
 	it("parses version from file name.", function(done){
-		var versions = [201401261512,201401261513];
+		var versions = [201401261512,201401261513,201401261513.1];
 		var migrator = ektorp(_conn, __dirname + '/testMigrations');
 		
 		migrator.on('applied', function(label){
 					expect(label).toEqual(versions.shift());
 				})
 				.on('done', function(){
+					//ensure all migrations were applied.
+					expect(versions.length).toBe(0);
 					done();
 				});
 
@@ -164,7 +166,7 @@ describe("Migration function", function(){
 
 		migrator.on('applied',appliedSpy)
 				.on('done', function(){
-					expect(appliedSpy.callCount).toEqual(2);
+					expect(appliedSpy.callCount).toEqual(3);
 					done();
 				});
 

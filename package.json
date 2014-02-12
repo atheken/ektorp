@@ -1,6 +1,6 @@
 {
   "name": "ektorp",
-  "version": "0.0.7-alpha",
+  "version": "0.0.1-alpha8",
   "description": "Migrations framework for CouchDB. Some assembly required!",
   "homepage": "http://couchmigrations.org/",
   "main": "lib/index.js",
