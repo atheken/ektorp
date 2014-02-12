@@ -11,3 +11,10 @@ services:
   - couchdb
 env:
   - TEST_TIMEOUT=5000
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/dcb5b3fbab1987ff5603
+    on_success: always
+    on_failure: always
+    on_start: false
