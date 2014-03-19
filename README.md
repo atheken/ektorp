@@ -46,15 +46,15 @@ To integrate ektorp and control more aspects of the migration:
 	migrator.start();
 	```
 
-#### How do I write a migration? 
+#### How do I write a migration?
 
 Here's one way that is supported (there are others that will be documented soon):
 
-1. Create a directory: 
-	
+1. Create a directory:
+
 	`$ mkdir ./migrations`
 
-2. Make a migration: 
+2. Make a migration:
 
 	```
 	$ cd ./migrations

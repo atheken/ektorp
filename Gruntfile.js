@@ -10,8 +10,8 @@ module.exports = function(grunt) {
       },
     },
     jasmine_node: {
-      specNameMatcher: ".", // load only specs containing specNameMatcher
-      projectRoot: "./spec",
+      specNameMatcher: '.', // load only specs containing specNameMatcher
+      projectRoot: './spec',
       requirejs: false,
       forceExit: true
     },
@@ -23,6 +23,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jasmine-node');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  
+
   grunt.registerTask('default', 'watch');
 };
