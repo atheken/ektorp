@@ -5,9 +5,7 @@ _Ektorp is a node.js library and command-line utility for building your CouchDB.
 
 #### Project Status
 
-_Ektorp is incomplete but we have a number of tests, and most of them are passing. :-)_
-
-[![Build Status](https://travis-ci.org/atheken/ektorp.png?branch=master)](https://travis-ci.org/atheken/ektorp)
+_Ektorp is incomplete, and is in a "stabilized state of decay". Mostly, this means that you should fork this project and enhance it for your own needs. I don't have any plans to enhance it, going forward. :-)_
 
 #### Using Ektorp
 
